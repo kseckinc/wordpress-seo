@@ -1,5 +1,7 @@
 import { useDispatch, useSelect } from "@wordpress/data";
 import { useCallback } from "@wordpress/element";
+import { SnippetEditor } from "@yoast/search-metadata-previews";
+import GooglePreviewContainer from "@yoast/seo-integration/build/google-preview-container";
 import { SEO_STORE_NAME, useAnalyze } from "@yoast/seo-store";
 import { debounce } from "lodash";
 import "./app.css";
@@ -126,8 +128,9 @@ const GooglePreview = () => {
 	);
 };
 
-function App() {
+function App( { analysisTypeReplacementVariables } ) {
 	useAnalyze();
+	const analysisType = useSelect( select => select( SEO_STORE_NAME ).selectAnalysisType() );
 
 	return (
 		<>
@@ -135,7 +138,7 @@ function App() {
 			<aside className="sidebar inline-flex flex-column">
 				<h2>Sidebar</h2>
 				<Keyphrases />
-				<GooglePreview />
+				<GooglePreviewContainer as={ SnippetEditor } replacementVariables={ analysisTypeReplacementVariables[ analysisType ].variables } />
 				<h4>SEO Results</h4>
 				<div>...</div>
 				<h4>Readability Results</h4>
